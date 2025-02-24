@@ -5,6 +5,8 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["node", "accepts", "body-parser", "connect", "content-disposition", "cookies", "express", "express-serve-static-core", "http-assert", "http-errors", "keygrip", "koa", "koa-compose", "mime", "q", "qs", "range-parser", "resolve", "send", "serve-static"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
