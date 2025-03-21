@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import CandidateSearch from './pages/CandidateSearch';
 import SavedCandidates from './pages/SavedCandidates';
@@ -8,10 +8,10 @@ const App: React.FC = () => {
     <Router>
       <Header />
       <main>
-        <Switch>
-          <Route exact path="/" component={CandidateSearch} />
-          <Route path="/saved" component={SavedCandidates} />
-        </Switch>
+        <Routes>
+          <Route path="/" element={<CandidateSearch />} />
+          <Route path="/saved" element={<SavedCandidates />} />
+        </Routes>
       </main>
     </Router>
   );
