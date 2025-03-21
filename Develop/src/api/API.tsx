@@ -1,44 +1,62 @@
-const searchGithub = async () => {
-  try {
-    const start = Math.floor(Math.random() * 100000000) + 1;
-    // console.log(import.meta.env);
-    const response = await fetch(
-      `https://api.github.com/users?since=${start}`,
-      {
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
-        },
-      }
-    );
-    // console.log('Response:', response);
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error('invalid API response, check the network tab');
-    }
-    // console.log('Data:', data);
-    return data;
-  } catch (err) {
-    // console.log('an error occurred', err);
-    return [];
-  }
-};
+const API_URL = 'https://api.github.com/users';
 
-const searchGithubUser = async (username: string) => {
+export const getCandidate = async () => {
   try {
-    const response = await fetch(`https://api.github.com/users/${username}`, {
+    const response = await fetch(API_URL, {
       headers: {
-        Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
+        Authorization: `token ${import.meta.env.VITE_GITHUB_TOKEN}`,
       },
     });
-    const data = await response.json();
+
     if (!response.ok) {
-      throw new Error('invalid API response, check the network tab');
+      throw new Error(`Error fetching candidates: ${response.status}`);
     }
-    return data;
-  } catch (err) {
-    // console.log('an error occurred', err);
-    return {};
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 };
 
-export { searchGithub, searchGithubUser };
+export const saveCandidate = async (candidate) => {
+  try {
+    const response = await fetch('http://localhost:3001/candidates', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(candidate),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error saving candidate: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const rejectCandidate = async (candidate) => {
+  try {
+    const response = await fetch('http://localhost:3001/rejected', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(candidate),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error rejecting candidate: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

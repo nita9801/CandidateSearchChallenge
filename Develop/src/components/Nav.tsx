@@ -1,8 +1,21 @@
+import { Link } from 'react-router-dom';
+
 const Nav = () => {
-  // TODO: Add necessary code to display the navigation bar and link between the pages
+  const navItems = [
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' },
+    { name: 'Contact', path: '/contact' },
+  ];
+
   return (
-    <div>Nav</div>
-  )
+    <nav style={{ display: 'flex', gap: '1rem', padding: '1rem', backgroundColor: '#f0f0f0' }}>
+      {navItems.map((item) => (
+        <Link key={item.path} to={item.path} style={{ textDecoration: 'none', color: 'blue' }}>
+          {item.name}
+        </Link>
+      ))}
+    </nav>
+  );
 };
 
 export default Nav;
