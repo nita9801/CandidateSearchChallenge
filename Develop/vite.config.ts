@@ -6,11 +6,7 @@ export default defineConfig({
   envDir: './env',
   plugins: [react()], 
   // other rules...
-  parserOptions: {
-  ecmaVersion: 'latest',
-  sourceType: 'module',
-  project: ['./tsconfig.json', './tsconfig.node.json'],
-  tsconfigRootDir: __dirname,},
+  // Removed `parserOptions` property because it is not supported in Vite's configuration schema.
 });
 
  

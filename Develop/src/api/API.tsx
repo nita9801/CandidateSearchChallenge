@@ -1,3 +1,5 @@
+import { Candidate } from '../interfaces/Candidate.interface';
+
 const API_URL = 'https://api.github.com/users';
 
 export const getCandidate = async () => {
@@ -18,13 +20,6 @@ export const getCandidate = async () => {
     throw error;
   }
 };
-
-interface Candidate {
-  id: number;
-  name: string;
-  email: string;
-  // Add other fields as needed
-}
 
 export const saveCandidate = async (candidate: Candidate) => {
   try {
