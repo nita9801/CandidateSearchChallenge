@@ -5,8 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   envDir: './env',
   plugins: [react()], 
-  // other rules...
-  // Removed `parserOptions` property because it is not supported in Vite's configuration schema.
+ 
 });
 
  
