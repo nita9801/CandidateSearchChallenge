@@ -19,7 +19,14 @@ export const getCandidate = async () => {
   }
 };
 
-export const saveCandidate = async (candidate) => {
+interface Candidate {
+  id: number;
+  name: string;
+  email: string;
+  // Add other fields as needed
+}
+
+export const saveCandidate = async (candidate: Candidate) => {
   try {
     const response = await fetch('http://localhost:3001/candidates', {
       method: 'POST',
@@ -40,7 +47,7 @@ export const saveCandidate = async (candidate) => {
   }
 };
 
-export const rejectCandidate = async (candidate) => {
+export const rejectCandidate = async (candidate: Candidate) => {
   try {
     const response = await fetch('http://localhost:3001/rejected', {
       method: 'POST',
