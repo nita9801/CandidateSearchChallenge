@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CandidateCard from '../components/CandidateCard';
+import CandidateCard from './CandidateCard';
 
 const CandidateSearch: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -8,6 +8,7 @@ const CandidateSearch: React.FC = () => {
       id: 1,
       name: 'Chewbaca James',
       username: 'jChewie',
+      login: 'jChewie',
       location: 'New York, USA',
       avatar_url: 'https://example.com/avatar1.jpg',
       email: 'jChewie@example.com',
@@ -16,8 +17,8 @@ const CandidateSearch: React.FC = () => {
     },
     {
       id: 2,
-      name: 'Jody Foster',
       username: 'jFoster',
+      login: 'jFoster',
       location: 'Los Angeles, USA',
       avatar_url: 'https://example.com/avatar2.jpg',
       email: 'jFoster@example.com',
@@ -25,7 +26,7 @@ const CandidateSearch: React.FC = () => {
       company: 'Innovated Corp',
     },
     {
-      id: 3,
+      login: 'WayneJ',
       name: 'John Wayne',
       username: 'WayneJ',
       location: 'Chicago, USA',
@@ -36,7 +37,7 @@ const CandidateSearch: React.FC = () => {
     },
   ];
 const filteredCandidates = savedCandidates.filter((candidate) =>
-  candidate.name.toLowerCase().includes(searchQuery.toLowerCase())
+  candidate.name?.toLowerCase().includes(searchQuery.toLowerCase())
 );
 
 return (
