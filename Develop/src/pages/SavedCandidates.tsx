@@ -34,14 +34,13 @@ const SavedCandidates: React.FC = () => {
 
   return (
     <div>
-      <h1>Saved Candidates</h1>
       <input
         type="text"
-        placeholder="Search candidates..."
+        placeholder="Search candidates"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        style={{ padding: '0.5rem', marginBottom: '1rem' }}
       />
+     
       {error ? (
         <p>Error: {error}</p>
       ) : filteredCandidates.length > 0 ? (

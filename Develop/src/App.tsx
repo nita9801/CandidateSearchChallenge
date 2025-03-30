@@ -15,45 +15,61 @@ const App: React.FC = () => {
     company?: string;
   }> | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>(''); // Define searchQuery state
+  const [error, setError] = useState<string | null>(null); // Define error state
 
-  useEffect(() => {
-    fetch('http://localhost:3001/candidates') // Replace with your API endpoint
-      .then((res) => res.json())
-      .then((data) => setCandidate(data));
+    useEffect(() => {
+    const fetchAndSetCandidates = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/candidates');
+        console.log('Response:', response);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('Data:', data);
+        setCandidate(data);
+      } catch (err) {
+        console.error('Error fetching candidates:', err);
+        setError('Failed to fetch candidates. Please check the backend server.');
+      }
+    };
+  
+    fetchAndSetCandidates();
   }, []);
 
   return (
     <div>
       <Header />
       <Nav />
-      <div style={{ margin: '1rem' }}>
+      <div>
         <input
           type="text"
           placeholder="Search candidates..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)} // Update search query
-          style={{ padding: '0.5rem', marginRight: '0.5rem' }}
         />
         <button
           onClick={() => console.log('Search triggered:', searchQuery)} // Optional: Debugging
-          style={{ padding: '0.5rem' }}
         >
           Search
         </button>
         <button
           onClick={() => setSearchQuery('')} // Clear the search query
-          style={{ padding: '0.5rem', marginLeft: '0.5rem' }}
         >
           Clear
         </button>
       </div>
+      {error && (
+        <div style={{ color: 'red' }}>
+          {error.toString()}
+        </div>
+      )}
       {candidate &&
         candidate
           .filter((user: any) =>
             user.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             user.login?.toLowerCase().includes(searchQuery.toLowerCase())
           )
-
           .map((user: any) => (
             <CandidateCard
               candidate={{
