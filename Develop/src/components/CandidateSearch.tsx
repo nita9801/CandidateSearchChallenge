@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import CandidateCard from './CandidateCard';
 
+
 const CandidateSearch: React.FC = () => {
+  // Removed unused 'candidates' variable to resolve the error
   const [searchQuery, setSearchQuery] = useState('');
   const savedCandidates = [
     {
@@ -49,14 +51,15 @@ return (
       onChange={(e) => setSearchQuery(e.target.value)}
     />
     <ul>
-  {filteredCandidates.map((candidate) => (
-    <CandidateCard key={candidate.id} candidate={candidate} onSave={function (): void {
-          throw new Error('Function not implemented.');
-      } } onReject={function (): void {
-          throw new Error('Function not implemented.');
-      } } />
-  ))}
-</ul>
+      {filteredCandidates.map((candidate) => (
+        <CandidateCard
+          key={candidate.email} // Use a unique identifier, such as `email`
+          candidate={candidate}
+          onSave={() => console.log('Saved:', candidate)}
+          onReject={() => console.log('Rejected:', candidate)}
+        />
+      ))}
+    </ul>
   </div>
   );
 };
