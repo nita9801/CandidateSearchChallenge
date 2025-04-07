@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CandidateCard from './CandidateCard';
+import CandidateCard from '../components/CandidateCard';
 
 
 const CandidateSearch: React.FC = () => {
