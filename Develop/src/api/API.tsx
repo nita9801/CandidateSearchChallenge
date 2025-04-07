@@ -1,64 +1,74 @@
-import { Candidate } from '../interfaces/Candidate.interface';
-
-const API_URL = 'https://api.github.com/users';
-
-export const getCandidate = async () => {
+const searchGithub = async () => {
   try {
-    const response = await fetch(API_URL, {
+    const start = Math.floor(Math.random() * 100000000) + 1;
+    // console.log(import.meta.env);
+    const response = await fetch(
+      `https://api.github.com/users?since=${start}`,
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
+        },
+      }
+    );
+    // console.log('Response:', response);
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error('invalid API response, check the network tab');
+    }
+    // console.log('Data:', data);
+    return data;
+  } catch (err) {
+    // console.log('an error occurred', err);
+    return [];
+  }
+};
+
+const searchGithubUser = async (username: string) => {
+  try {
+    const response = await fetch(`https://api.github.com/users/${username}`, {
       headers: {
-        Authorization: `token ${import.meta.env.VITE_GITHUB_TOKEN}`,
+        Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
       },
     });
 
     if (!response.ok) {
-      throw new Error(`Error fetching candidates: ${response.status}`);
+      if (response.status === 404) {
+        console.error(`User not found: ${username}`);
+        return {
+          id: 0,
+          login: username,
+          avatar_url: '',
+          html_url: '',
+          name: 'User Not Found',
+          email: '',
+          bio: '',
+        };
+      }
+      throw new Error(`API error: ${response.status}`);
     }
 
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    throw error;
+    const data = await response.json();
+    return {
+      id: data.id || 0,
+      login: data.login || '',
+      avatar_url: data.avatar_url || '',
+      html_url: data.html_url || '',
+      name: data.name || '',
+      email: data.email || '',
+      bio: data.bio || '',
+    };
+  } catch (err) {
+    console.error('Error fetching user:', err);
+    return {
+      id: 0,
+      login: '',
+      avatar_url: '',
+      html_url: '',
+      name: '',
+      email: '',
+      bio: '',
+    };
   }
 };
 
-export const saveCandidate = async (candidate: Candidate) => {
-  try {
-    const response = await fetch('http://localhost:3001/candidates', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(candidate),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error saving candidate: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-export const rejectCandidate = async (candidate: Candidate) => {
-  try {
-    const response = await fetch('http://localhost:3001/rejected', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(candidate),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error rejecting candidate: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
+export { searchGithub, searchGithubUser };

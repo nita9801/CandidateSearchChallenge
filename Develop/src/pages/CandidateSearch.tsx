@@ -1,66 +1,97 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CandidateCard from '../components/CandidateCard';
-
+import { Candidate } from '../interfaces/Candidate.interface';
+import { searchGithub, searchGithubUser } from '../api/API';
 
 const CandidateSearch: React.FC = () => {
-  // Removed unused 'candidates' variable to resolve the error
-  const [searchQuery, setSearchQuery] = useState('');
-  const savedCandidates = [
-    {
-      id: 1,
-      name: 'Chewbaca James',
-      username: 'jChewie',
-      login: 'jChewie',
-      location: 'New York, USA',
-      avatar_url: 'https://example.com/avatar1.jpg',
-      email: 'jChewie@example.com',
-      html_url: 'https://example.com/Chewie',
-      company: 'Space Inc',
-    },
-    {
-      id: 2,
-      username: 'jFoster',
-      login: 'jFoster',
-      location: 'Los Angeles, USA',
-      avatar_url: 'https://example.com/avatar2.jpg',
-      email: 'jFoster@example.com',
-      html_url: 'https://example.com/Foster',
-      company: 'Innovated Corp',
-    },
-    {
-      login: 'WayneJ',
-      name: 'John Wayne',
-      username: 'WayneJ',
-      location: 'Chicago, USA',
-      avatar_url: 'https://example.com/avatar3.jpg',
-      email: 'Wayne.John@example.com',
-      html_url: 'https://example.com/WaynethePayne',
-      company: 'Creature Co',
-    },
-  ];
-const filteredCandidates = savedCandidates.filter((candidate) =>
-  candidate.name?.toLowerCase().includes(searchQuery.toLowerCase())
-);
+  const [candidates, setCandidates] = useState<Candidate[] | null>(null);
+  const [ index,setIndex]= useState(0);
+  const [selectedCandidate, setSelectedCandidate] = useState<Candidate>({
+    id: 0,
+    login: '',
+    avatar_url: '',
+    html_url: '',
+    email: '',
+    name: '',
+    bio: '',
+  });
 
-return (
-  <div>
-    <input
-      type="text"
-      placeholder="Search candidates..."
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-    />
-    <ul>
-      {filteredCandidates.map((candidate) => (
-        <CandidateCard
-          key={candidate.email} // Use a unique identifier, such as `email`
-          candidate={candidate}
-          onSave={() => console.log('Saved:', candidate)}
-          onReject={() => console.log('Rejected:', candidate)}
-        />
-      ))}
-    </ul>
-  </div>
-  );
+  //when the component loads get a list of candidates
+
+  useEffect(function () {
+    async function getCandidates() {
+      const users = await searchGithub();
+      console.log('Fetched users:', users);
+    setCandidates(users);
+
+    if (users.length > 0) {
+      const user = await searchGithubUser(users[0].login);
+      setSelectedCandidate(user);
+    };
+  };
+    getCandidates();
+}, []);
+
+  // Display the first candidate in the list
+useEffect(function(){
+  async function getCandidateInfo() {
+    if (!candidates || !candidates[index]) {
+      console.error (' Invalid Candidate');
+      return;
+    }
+
+    const username = candidates[index].login;
+    if (!username) {
+      console.error('Invalid username');
+      return;
+    }
+
+    try {
+      const user = await searchGithubUser(candidates[index].login);
+      setSelectedCandidate(user);
+    } catch (error) {
+      console.error('Error fetching candidate details:', error);
+    }
+
+    // use the other function to get the candidate details
+  const user= await searchGithubUser(candidates[index].login);
+  setSelectedCandidate(user)
+  }
+  getCandidateInfo();
+},
+[index, candidates]);
+
+  // when they save or reject candidate go to the next in line
+const saveCandidate = (candidate: Candidate) => {
+  console.log('saving Candidate', candidate);
+
+  let savedCandidates;
+  try {
+    savedCandidates = JSON.parse(localStorage.getItem('savedCandidates') || '[]');
+  } catch (error) {
+    console.error('Error parsing savedCandidates from localStorage:', error);
+    savedCandidates = [];
+  }
+  savedCandidates.push(candidate);
+  localStorage.setItem('savedCandidates', JSON.stringify(savedCandidates));
+
+  if (candidates && index + 1 < candidates.length) {
+    setIndex(index + 1);
+  } else {
+    console.log('No more candidates to display');
+  }
 };
-export default CandidateSearch;
+
+  return (
+    <div>
+      <h1>Candidate Search</h1>
+      <CandidateCard
+        key={selectedCandidate.email} // Use a unique identifier, such as `email`
+        candidate={selectedCandidate}
+        onSave={() => saveCandidate(selectedCandidate)}
+        onReject={() => setIndex(index+1)}
+      />
+    </div>      
+  );
+}
+export default CandidateSearch

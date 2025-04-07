@@ -5,13 +5,19 @@ const SavedCandidates: React.FC = () => {
   const [error] = React.useState<string | null>(null);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [savedCandidates, setSavedCandidates] = React.useState<
-    { name: string; email: string; login: string; avatar_url: string; html_url: string }[]
+    { id: number; name: string; email: string; login: string; avatar_url: string; html_url: string }[]
   >([]);
 
   React.useEffect(() => {
     const savedData = localStorage.getItem('savedCandidates');
     if (savedData) {
-      setSavedCandidates(JSON.parse(savedData));
+      const parsedData = JSON.parse(savedData);
+      // Ensure each candidate has an `id` property
+      const validatedData = parsedData.map((candidate: any) => ({
+        id: candidate.id || 0, // Default to 0 if `id` is missing
+        ...candidate,
+      }));
+      setSavedCandidates(validatedData);
     }
   }, []);
 
@@ -23,7 +29,7 @@ const SavedCandidates: React.FC = () => {
     [savedCandidates, searchQuery]
   );
 
-  const handleReject = (candidate: any) => {
+  const handleReject = (candidate: { name: string; email: string; login: string; avatar_url: string; html_url: string }) => {
     console.log('Reject candidate:', candidate);
     setSavedCandidates((prev) => prev.filter((c) => c.email !== candidate.email));
     localStorage.setItem(
