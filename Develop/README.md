@@ -3,12 +3,12 @@
 
 <br />
 <div align="center">
-  <a href="https://github.com/nita9801/CandidateSearchChallenge.git">
+  <a href="https://candidatesearchchallenge.onrender.com">
     </a>
 <h3 align="center">CandidateSearchChallenge</h3>
   <p align="center">
     This application reviews users on Github and produces a list of potential candidates it allows you to go down the list with saving or rejecting candidats using the plus or minus button
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://github.com/nita9801/CandidateSearchChallenge.git">View Demo</a>
  </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -72,7 +72,7 @@ download required dependencies to VS and run the application from there in brows
 1.
 2. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/nita9801/CandidateSearchChallenge.git
    ```
 3. Install NPM packages
    ```sh
@@ -123,7 +123,7 @@ Distributed under the project_license. See `License` for more information.
 
 C Lopez-  -187074331+nita9801@users.noreply.github.com
 
-Project Link: [git@github.com:nita9801/CandidateSearchChallenge.git](git@github.com:nita9801/CandidateSearchChallenge.git)
+Project Link: [https://github.com/nita9801/CandidateSearchChallenge.git](https://github.com/nita9801/CandidateSearchChallenge.git)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
