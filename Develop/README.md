@@ -8,7 +8,7 @@
 <h3 align="center">CandidateSearchChallenge</h3>
   <p align="center">
     This application reviews users on Github and produces a list of potential candidates it allows you to go down the list with saving or rejecting candidats using the plus or minus button
-    <a href="https://github.com/nita9801/CandidateSearchChallenge.git">View Demo</a>
+    <a href="https://app.screencastify.com/v3/watch/tfWEMyi0Bmg4XDQ1u0dO">View Demo</a>
  </div>
 
 <!-- TABLE OF CONTENTS -->
