@@ -10,8 +10,11 @@ const searchGithub = async () => {
         },
       }
     );
+
+
     // console.log('Response:', response);
     const data = await response.json();
+    console.log('Data:', data);
     if (!response.ok) {
       throw new Error('invalid API response, check the network tab');
     }
@@ -30,44 +33,14 @@ const searchGithubUser = async (username: string) => {
         Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
       },
     });
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        console.error(`User not found: ${username}`);
-        return {
-          id: 0,
-          login: username,
-          avatar_url: '',
-          html_url: '',
-          name: 'User Not Found',
-          email: '',
-          bio: '',
-        };
-      }
-      throw new Error(`API error: ${response.status}`);
-    }
-
     const data = await response.json();
-    return {
-      id: data.id || 0,
-      login: data.login || '',
-      avatar_url: data.avatar_url || '',
-      html_url: data.html_url || '',
-      name: data.name || '',
-      email: data.email || '',
-      bio: data.bio || '',
-    };
+    if (!response.ok) {
+      throw new Error('invalid API response, check the network tab');
+    }
+    return data;
   } catch (err) {
-    console.error('Error fetching user:', err);
-    return {
-      id: 0,
-      login: '',
-      avatar_url: '',
-      html_url: '',
-      name: '',
-      email: '',
-      bio: '',
-    };
+    // console.log('an error occurred', err);
+    return {};
   }
 };
 
